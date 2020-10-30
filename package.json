@@ -1,17 +1,18 @@
 {
-    "name": "my_blog",
-    "version": "1.0.0",
-    "description": "",
-    "main": "bin/index.js",
-    "scripts": {
-        "test": "echo \"Error: no test specified\" && exit 1",
-        "dev": "cross-env NODE_ENV=dev nodemon './bin/index.js'"
-    },
-    "keywords": [],
-    "author": "",
-    "license": "ISC",
-    "devDependencies": {
-        "cross-env": "^7.0.2",
-        "nodemon": "^2.0.6"
-    }
+  "name": "my_blog",
+  "version": "1.0.0",
+  "description": "",
+  "main": "bin/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "cross-env NODE_ENV=dev nodemon './bin/index.js'"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "cross-env": "^7.0.2",
+    "mysql": "^2.18.1",
+    "nodemon": "^2.0.6"
+  }
 }
