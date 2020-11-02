@@ -1,4 +1,4 @@
-const { exec } = require('../../db/mysql');
+const { exec } = require('../db/mysql');
 const bloglist = (author, keyword) => {
     let sql = `select * from blogs where 1=1 `
     if (author) {
