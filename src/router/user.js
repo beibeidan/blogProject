@@ -1,5 +1,6 @@
 const { SuccessModel, ErrorModel } = require('../model/resModel')
-const { userLogin } = require('../controller/user')
+const { userLogin } = require('../controller/user');
+const { set } = require('../db/redis');
 
 // const getCookieExpire = () => {
 //     const d = new Date();
@@ -30,7 +31,9 @@ const handleUser = (req, res) => {
                 // 设置session
                 req.session.username = data.username;
                 req.session.realname = data.realname;
-                console.log('req session is', req.session)
+
+                // 登陆后将信息存入session中
+                set(req.sessionId, req.session)
                 return new SuccessModel()
             }
             return new ErrorModel('登录失败')

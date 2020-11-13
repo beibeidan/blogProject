@@ -1,5 +1,6 @@
 // 处理请求回调
 const querystring = require('querystring');
+const {set, get } = require('./src/db/redis')
 const handleBlog = require('./src/router/blog')
 const handleUser = require('./src/router/user')
 
@@ -63,20 +64,38 @@ const serviceHandle = (req, res) => {
         req.cookie[key] = val;
     });
 
-    // 解析session
+    // // 解析session
+    // let needCookie = false; // 是否需要写入cookie的标识
+    // let userId = req.cookie.userid;
+    // if (userId) {
+    //     if (!SESSION_DATA[userId]) {
+    //         SESSION_DATA[userId] = {};
+    //     }
+    // } else {
+    //     // 如果cookie中没有userid，要将userid写入cookie中
+    //     needCookie = true;
+    //     userId = `${Date.now()}_${Math.random()}`; // 没有的话赋值为一个随机数
+    //     SESSION_DATA[userId] = {};
+    // }
+    // req.session = SESSION_DATA[userId];
+
+    // 解析session (使用redis)
     let needCookie = false; // 是否需要写入cookie的标识
     let userId = req.cookie.userid;
-    if (userId) {
-        if (!SESSION_DATA[userId]) {
-            SESSION_DATA[userId] = {};
-        }
-    } else {
-        // 如果cookie中没有userid，要将userid写入cookie中
+    if (!userId) {
         needCookie = true;
         userId = `${Date.now()}_${Math.random()}`; // 没有的话赋值为一个随机数
-        SESSION_DATA[userId] = {};
+        set(userId, {})
     }
-    req.session = SESSION_DATA[userId];
+    req.sessionId = userId;
+    get(req.sessionId).then(sessionData => {
+        if (sessionData == null) {
+            set(req.sessionId, {})
+        }
+        req.session = sessionData
+        console.log('req.session is', req.session)
+    })
+
 
     getPostData(req).then(postData => {
         req.body = postData
